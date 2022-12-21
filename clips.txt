@@ -1,0 +1,262 @@
+
+=================================================================================================================QUESTIONS=================================================================================================================
+(defrule d-startowe
+
+   (logical (start))
+
+   =>
+
+   (assert (UI-state (display StartQuestion)
+                     (relation-asserted startowe) 
+                     (response Bankroll)
+                     (valid-answers Bankroll Whining Neverlookup Smashes Onephone))))
+
+(defrule d-Bankroll
+
+   (logical (startowe Bankroll))
+
+   =>
+ 
+   (assert (UI-state (display Bankroll)
+                     (relation-asserted Bankroll) 
+                     (response Half)
+                     (valid-answers Half BankrollYes BankrollNo))))
+
+(defrule d-Whining 
+
+   (logical (startowe Whining))
+
+   =>
+ 
+   (assert (UI-state (display Whining)
+                     (relation-asserted Whining) 
+                     (response WhiningYes)
+                     (valid-answers WhiningYes WhiningNo WhiningStop))))
+
+(defrule d-Neverlookup 
+
+   (logical (startowe Neverlookup))
+
+   =>
+ 
+   (assert (UI-state (display Neverlookup)
+                     (relation-asserted Neverlookup) 
+                     (response NeverlookupYes)
+                     (valid-answers NeverlookupYes NeverlookupNo))))
+
+(defrule d-Smashes
+
+   (logical (startowe Smashes))
+
+   =>
+ 
+   (assert (UI-state (display Smashes)
+                     (relation-asserted Smashes) 
+                     (response SmashesMyPhone)
+                     (valid-answers SmashesMyPhone SmashesExcuse SmashesFine))))
+
+(defrule d-Onephone
+
+   (logical (startowe Onephone))
+
+   =>
+ 
+   (assert (UI-state (display Onephone)
+                     (relation-asserted Onephone) 
+                     (response OnephoneDude)
+                     (valid-answers OnephoneDude))))
+
+
+(defrule d-HardEarned
+
+   (or 	(logical (Bankroll Half))
+	(logical (Bankroll BankrollYes)))
+
+   =>
+ 
+   (assert (UI-state (display HardEarned)
+                     (relation-asserted HardEarned) 
+                     (response HardEarnedGestIt)
+                     (valid-answers HardEarnedGestIt HumanATM))))
+
+
+
+(defrule d-HAHA
+
+  (or logical (Neverlookup  NeverlookupYes)
+	logical (UrgentCalls UrgentCallsAgreement))
+
+   =>
+ 
+   (assert (UI-state (display HAHA)
+                     (relation-asserted HAHA) 
+                     (response HAHAYEAH)
+                     (valid-answers HAHAYEAH HAHAangel))))
+
+
+(defrule d-LITERALLYlosing
+
+  (or logical (Neverlookup  NeverlookupNo)
+	logical (UrgentCalls UrgentCallsNo))
+
+   =>
+ 
+   (assert (UI-state (display LITERALLYlosing)
+                     (relation-asserted LITERALLYlosing) 
+                     (response LITERALLYlosingHangOn)
+                     (valid-answers LITERALLYlosingHangOn LITERALLYlosingSHUTDOWN))))
+
+(defrule d-ShockedLost
+
+  (or logical (LITERALLYlosing  LITERALLYlosingHangOn)
+	logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
+
+   =>
+ 
+   (assert (UI-state (display ShockedLost)
+                     (relation-asserted ShockedLost) 
+                     (response ShockedLostGuessNot)
+                     (valid-answers ShockedLostGuessNot ShockedLostFirstDay))))
+
+(defrule d-UrgentCalls
+
+  (logical (HAHA HAHAYEAH))
+
+   =>
+ 
+   (assert (UI-state (display UrgentCalls)
+                     (relation-asserted UrgentCalls) 
+                     (response UrgentCallsNo)
+                     (valid-answers UrgentCallsNo UrgentCallsAgreement))))
+
+(defrule d-Bullying
+
+  (logical (Whining WhiningYes))
+
+   =>
+ 
+   (assert (UI-state (display Bullying)
+                     (relation-asserted Bullying) 
+                     (response BullyingYes)
+                     (valid-answers BullyingYes))))
+
+(defrule d-PonyUp
+
+  (or (logical (Smashes SmashesMyPhone))
+	(logical (Smashes SmashesExcuse))
+	(logical (Smashes SmashesFine)))
+
+   =>
+ 
+   (assert (UI-state (display PonyUp)
+                     (relation-asserted PonyUp) 
+                     (response PonyUpYes)
+                     (valid-answers PonyUpYes PonyUpNo HumanATM))))
+
+
+
+
+(defrule d-MmmHmm
+
+   (logical (Onephone OnephoneDude))
+
+
+   =>
+ 
+   (assert (UI-state (display MmmHmm)
+                     (relation-asserted MmmHmm) 
+                     (response MmmHmmStory)
+                     (valid-answers MmmHmmStory HumanATM))))
+
+
+(defrule d-HUMANkid
+
+   (or (logical (HardEarned HardEarnedGestIt)
+	(logical (HAHA HAHAangel))
+
+   =>
+ 
+   (assert (UI-state (display HUMANkid)
+                     (relation-asserted HUMANkid) 
+                     (response MmmHmmStory)
+                     (valid-answers MmmHmmStory HumanATM))))
+
+
+(defrule d-Bullied
+
+   (logical (Bullying BullyingYes))
+
+
+   =>
+ 
+   (assert (UI-state (display Bullied)
+                     (relation-asserted Bullied) 
+                     (response BulliedYes)
+                     (valid-answers BulliedYes BulliedUsual))))
+
+(defrule d-GetSomething
+
+   (logical (Bullied BulliedUsual))
+
+
+   =>
+ 
+   (assert (UI-state (display GetSomething)
+                     (relation-asserted GetSomething) 
+                     (response GetSomethingSweet)
+                     (valid-answers GetSomethingSweet))))
+
+
+(defrule d-Puppy
+
+   (logical (Bullied BulliedYes))
+
+
+   =>
+ 
+   (assert (UI-state (display Puppy)
+                     (relation-asserted Puppy) 
+                     (response PuppyIDK)
+                     (valid-answers PuppyIDK PuppyYes))))
+
+(defrule d-AppleCare
+
+   (logical (Bullied BulliedYes))
+
+
+   =>
+ 
+   (assert (UI-state (display AppleCare)
+                     (relation-asserted AppleCare) 
+                     (response AppleCareUnbreakable)
+                     (valid-answers AppleCareUnbreakable HumanATM))))
+
+
+
+
+=================================================================================================================FINAL ANSWER=================================================================================================================
+(defrule 
+(or (HardEarned HumanATM)(PonyUp HumanATM)(AppleCare HumanATM)(GetSomething GetSomethingSweet))
+=>
+(assert (UI-state 	(display DontLookBack)
+			(state final)))
+
+(defrule 
+(or (Whining WhiningNo)(AppleCare AppleCareUnbreakable)(PonyUp PonyUpNo))
+=>
+(assert (UI-state 	(display DontGetPhone)
+			(state final)))
+
+(defrule 
+(or (Bankroll BankrollNo)(Puppy PuppyYes))
+=>
+(assert (UI-state 	(display WhyAsking)
+			(state final)))
+
+
+(defrule 
+(HUMANkid HUMANkidKinda)
+=>
+(assert (UI-state 	(display BuyAI)
+			(state final)))
+
