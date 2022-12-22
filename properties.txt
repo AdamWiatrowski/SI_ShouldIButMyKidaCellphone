@@ -20,7 +20,7 @@ Neverlookup=Do you mind if your kid never looks up from her phone again?
 NeverlookupYes=Actually, I have strict rules about the amount of time she will spend on her phone. 
 NeverlookupNo=One sec, I'm just finishing a game of Bejeweled.
 
-Smashes=How will you feel when your kid drops and smashes the pgone on the first day he has it?
+Smashes=How will you feel when your kid drops and smashes the phone on the first day he has it?
 SmashesMyPhone=Now it looks like my phone. Neat!
 SmashesExcuse=Excuse me while I curl up in a ball and weep.
 SmashesFine=Fine. I am a husk of my former self. I feel nothing.
