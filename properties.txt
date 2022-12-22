@@ -1,13 +1,16 @@
+# Properties File for English
 Cellphone=Should I Buy My Kid a Cellphone?
 WelcomeMessage=Welcome to the Cellphone Expert System.
-StartQuestion=
-
+StartQuestion=What do you want to start with?
+Prev=Prev
+Next=Next
+Restart=Restart
 
 Bankroll=Are you bankrolling this entire enterprise, player?
 Half=They pay half, I pay half. JK, I pay for most of it.
 BankrollYes=Yes. Against all scientific odds, I am made of money.
 BankrollNo=No, my kid's takehome pay is higher than mine, so he's paying for all of it.
- 
+
 Whining=Are you about to snap under crushing weight of constant whining?
 WhiningYes= Yes. This is all my kid talks about. I am slowly dying.
 WhiningNo=Actually, he never brought it up. I was just thinking...
