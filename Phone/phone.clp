@@ -1,15 +1,3 @@
-
-;;;======================================================
-;;;   Automotive Expert System
-;;;
-;;;     This expert system diagnoses some simple
-;;;     problems with a car.
-;;;
-;;;     CLIPS Version 6.3 Example
-;;;
-;;;     For use with the Auto Demo Example
-;;;======================================================
-
 ;;; ***************************
 ;;; * DEFTEMPLATES & DEFFACTS *
 ;;; ***************************
@@ -117,14 +105,9 @@
 )
 ;;;==================================================================================
 (defrule q-HardEarned
-   (or (and (logical (startowe Bankroll)) (logical (Bankroll Half)))
-	(and (logical(startowe Bankroll)) (logical(Bankroll BankrollYes)))
-	(and (logical (Whining WhiningStop)) (logical (Bankroll Half)))
-	(and (logical(Whining WhiningStop)) (logical(Bankroll BankrollYes)))
-	)
-
+(or (logical (Bankroll Half))
+    (logical (Bankroll BankrollYes)))
    =>
-
    (assert (UI-state (display HardEarned)
                      (relation-asserted HardEarned)
                      (response HardEarnedGestIt)
@@ -132,7 +115,7 @@
 )
 
 (defrule q-HAHA
-(or (logical (Neverlookup NeverlookupYes)))
+(logical (Neverlookup NeverlookupYes))
 
    =>
    (assert (UI-state (display HAHA)
@@ -142,7 +125,6 @@
 )
 (defrule q-HAHA2
  ?x <- (UrgentCalls UrgentCallsAgreement)
-
    =>
    (retract ?x)
    (assert (UI-state (display HAHA)
@@ -151,14 +133,8 @@
                      (valid-answers HAHAYEAH HAHAangel)))
 )
 (defrule q-LITERALLYlosing
-(or 		(and 	(logical (startowe Neverlookup))
-			        (logical(Neverlookup NeverlookupNo)))
-
-		    (and    (logical (startowe Neverlookup))
-   			        (logical (Neverlookup NeverlookupYes))
-			        (logical (HAHA HAHAYEAH))
-			        (logical (UrgentCalls UrgentCallsNo)))
-)
+(or (logical (Neverlookup NeverlookupNo))
+	(logical (UrgentCalls UrgentCallsNo)))
    =>
    (assert (UI-state (display LITERALLYlosing)
                      (relation-asserted LITERALLYlosing)
@@ -166,31 +142,16 @@
                      (valid-answers LITERALLYlosingHangOn LITERALLYlosingSHUTDOWN)))
 )
 (defrule q-ShockedLost
-(or 		(and 	(logical (startowe Neverlookup))
-			        (logical(Neverlookup NeverlookupNo))
-			(or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-				    (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-				)
-			)
-
-		    (and    (logical (startowe Neverlookup))
-   			        (logical (Neverlookup NeverlookupYes))
-			        (logical (HAHA HAHAYEAH))
-			        (logical (UrgentCalls UrgentCallsNo))
-			        (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-				            (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-				        )
-			)
-)
+(or (logical (LITERALLYlosing LITERALLYlosingHangOn))
+	(logical (LITERALLYlosing LITERALLYlosingSHUTDOWN)))
    =>
    (assert (UI-state (display ShockedLost)
                      (relation-asserted ShockedLost)
 		     (response ShockedLostGuessNot)
                      (valid-answers ShockedLostGuessNot ShockedLostFirstDay)))
 )
-;
 (defrule q-UrgentCalls
-    ?x <- (HAHA HAHAYEAH)
+   ?x <- (HAHA HAHAYEAH)
    =>
    (retract ?x)
    (assert (UI-state (display UrgentCalls)
@@ -198,9 +159,7 @@
 		             (response UrgentCallsNo)
                      (valid-answers UrgentCallsNo UrgentCallsAgreement)))
 )
-
 (defrule q-Bullying
-  (logical (startowe Whining))
   (logical (Whining WhiningYes))
    =>
    (assert (UI-state (display Bullying)
@@ -209,34 +168,11 @@
                      (valid-answers BullyingYes)))
 )
 (defrule q-PonyUp
-    (or     (and   (logical (startowe Smashes))
-                    (or 	(logical (Smashes SmashesMyPhone))
-         	                (logical (Smashes SmashesExcuse))
-         	                (logical (Smashes SmashesFine))))
-
-         	    (and        (or
-         	                        (and 	(logical (startowe Neverlookup))
-                 			                (logical(Neverlookup NeverlookupNo))
-                 			                (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-                 				                    (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-                 				            )
-                 			        )
-
-                 		            (and        (logical (startowe Neverlookup))
-                    			                (logical (Neverlookup NeverlookupYes))
-                 			                    (logical (HAHA HAHAYEAH))
-                 			                    (logical (UrgentCalls UrgentCallsNo))
-                 			                    (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-                 				                        (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-                 				                )
-                 			        )
-                            )
-                            (logical (ShockedLost ShockedLostGuessNot))
-                )
-
-
-    )
-
+(or (logical (ShockedLost ShockedLostGuessNot))
+    (logical (ShockedLost ShockedLostFirstDay))
+    (logical (Smashes SmashesMyPhone))
+    (logical (Smashes SmashesExcuse))
+    (logical (Smashes SmashesFine)))
    =>
 
    (assert (UI-state (display PonyUp)
@@ -244,9 +180,7 @@
                      (response PonyUpYes)
                      (valid-answers PonyUpYes PonyUpNo HumanATM)))
 )
-
 (defrule q-MmmHmm
-  (logical (startowe Onephone))
   (logical (Onephone OnephoneDude))
    =>
    (assert (UI-state (display MmmHmm)
@@ -255,22 +189,7 @@
                      (valid-answers MmmHmmStory HumanATM)))
 )
 (defrule q-HUMANkid
-	(or
-		(or 	(and (logical (startowe Bankroll)) (logical (Bankroll Half)) (logical (HardEarned HardEarnedGestIt)))
-			(and (logical(startowe Bankroll)) (logical(Bankroll BankrollYes)) (logical (HardEarned HardEarnedGestIt)))
-			(and (logical (Whining WhiningStop)) (logical (Bankroll Half)) (logical (HardEarned HardEarnedGestIt)))
-			(and (logical(Whining WhiningStop)) (logical(Bankroll BankrollYes)) (logical (HardEarned HardEarnedGestIt)))
-			)
-
-		(or 	(and    (logical (startowe Neverlookup))
-   				(logical (Neverlookup NeverlookupYes))
-				(logical (HAHA HAHAangel)))
-			(and    (logical (startowe Neverlookup))
-   				(logical (Neverlookup NeverlookupYes))
-				(logical (HAHA HAHAYEAH))
-				(logical (UrgentCalls UrgentCallsAgreement))
-				(logical (HAHA HAHAangel))))
-	)
+(or (logical (HAHA HAHAangel)) (logical (HardEarned HardEarnedGestIt)))
    =>
    (assert (UI-state (display HUMANkid)
                      (relation-asserted HUMANkid)
@@ -278,8 +197,6 @@
                      (valid-answers HUMANkidKinda)))
 )
 (defrule q-Bullied
-  (logical (startowe Whining))
-  (logical (Whining WhiningYes))
   (logical (Bullying BullyingYes))
    =>
    (assert (UI-state (display Bullied)
@@ -287,31 +204,16 @@
                      (response BulliedYes)
                      (valid-answers BulliedYes BulliedUsual)))
 )
-
 (defrule q-GetSomething
-	(or 	(and   	(logical (startowe Whining))
-  			        (logical (Whining WhiningYes))
-  			        (logical (Bullying BullyingYes))
-			        (logical (Bullied BulliedUsual))
-		    )
-		    (and   	(logical (startowe Whining))
-  			        (logical (Whining WhiningYes))
-  			        (logical (Bullying BullyingYes))
-			        (logical (Bullied BulliedYes))
-			        (logical (Puppy PuppyIDK))
-		    )
-    )
+(or (logical (Bullied BulliedUsual))
+	(logical (Puppy PuppyIDK)))
    =>
    (assert (UI-state (display GetSomething)
                      (relation-asserted GetSomething)
                      (response GetSomethingSweet)
                      (valid-answers GetSomethingSweet)))
 )
-
 (defrule q-Puppy
-	(logical (startowe Whining))
-  	(logical (Whining WhiningYes))
-  	(logical (Bullying BullyingYes))
 	(logical (Bullied BulliedYes))
    =>
    (assert (UI-state (display Puppy)
@@ -320,205 +222,45 @@
                      (valid-answers PuppyIDK PuppyYes)))
 )
 (defrule q-AppleCare
-	(or 	(and
-			(logical (startowe Onephone))
-  			(logical (Onephone OnephoneDude))
-			(logical (MmmHmm MmmHmmStory)))
-		(and	(logical (startowe Smashes))
-  			(or 	(and (logical (Smashes SmashesMyPhone))(logical (PonyUp PonyUpYes)))
-				(and (logical (Smashes SmashesExcuse))(logical (PonyUp PonyUpYes)))
-				(and (logical (Smashes SmashesFine))(logical (PonyUp PonyUpYes))))
-			)
-	)
+(or (logical (PonyUp PonyUpYes))
+	(logical (MmmHmm MmmHmmStory)))
    =>
    (assert (UI-state (display AppleCare)
                      (relation-asserted AppleCare)
                      (response AppleCareUnbreakable)
                      (valid-answers AppleCareUnbreakable HumanATM)))
 )
-
 (defrule q-BuyAI
-	(or
-		(or 	(and (logical (startowe Bankroll)) (logical (Bankroll Half)) (logical (HardEarned HardEarnedGestIt)))
-			(and (logical(startowe Bankroll)) (logical(Bankroll BankrollYes)) (logical (HardEarned HardEarnedGestIt)))
-			(and (logical (Whining WhiningStop)) (logical (Bankroll Half)) (logical (HardEarned HardEarnedGestIt)))
-			(and (logical(Whining WhiningStop)) (logical(Bankroll BankrollYes)) (logical (HardEarned HardEarnedGestIt)))
-			)
-
-
-		(or 	(and    (logical (startowe Neverlookup))
-   				(logical (Neverlookup NeverlookupYes))
-				(logical (HAHA HAHAangel)))
-			(and    (logical (startowe Neverlookup))
-   				(logical (Neverlookup NeverlookupYes))
-				(logical (HAHA HAHAYEAH))
-				(logical (UrgentCalls UrgentCallsAgreement))
-				(logical (HAHA HAHAangel))))
-	)
-	(logical (HUMANkid HUMANkidKinda))
+(logical (HUMANkid HUMANkidKinda))
 =>
 (assert (UI-state 	(display BuyAI)
 			(state final)))
-			)
-
-
-
+)
 (defrule q-WhyAsking
-	(or
-		(and 	(logical (startowe Whining))
-  			    (logical (Whining WhiningYes))
-  			    (logical (Bullying BullyingYes))
-			    (logical (Bullied BulliedYes))
-			    (logical (Puppy PuppyYes))
-	    )
-
-		(and	(or 	(logical (startowe Bankroll))
-				        (logical (Whining WhiningStop))
-				)
-			    (logical (Bankroll BankrollNo))
-	    )
-
-	)
+(or (logical (Bankroll BankrollNo))
+	(logical (Puppy PuppyYes)))
 =>
 (assert (UI-state 	(display WhyAsking)
 			(state final)))
-			)
-
-
-(defrule q-DontGetPhone
-(or
-       (and
-            (logical (startowe Whining))
-            (logical (Whining WhiningNo))
-       )
-       (and    (or     (and   (logical (startowe Smashes))
-                            (or 	(logical (Smashes SmashesMyPhone))
-                 	                (logical (Smashes SmashesExcuse))
-                 	                (logical (Smashes SmashesFine))))
-
-                 	    (and        (or
-                 	                        (and 	(logical (startowe Neverlookup))
-                         			                (logical(Neverlookup NeverlookupNo))
-                         			                (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-                         				                    (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-                         				            )
-                         			        )
-                         		            (and        (logical (startowe Neverlookup))
-                            			                (logical (Neverlookup NeverlookupYes))
-                         			                    (logical (HAHA HAHAYEAH))
-                         			                    (logical (UrgentCalls UrgentCallsNo))
-                         			                    (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-                         				                        (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-                         				                )
-                         			        )
-                                    )
-                                    (logical (ShockedLost ShockedLostGuessNot))
-                        )
-            )
-            (logical (PonyUp PonyUpNo))
-       )
-       (and	(or 	(and
-        			(logical (startowe Onephone))
-          			(logical (Onephone OnephoneDude))
-        			(logical (MmmHmm MmmHmmStory)))
-        		(and	(logical (startowe Smashes))
-          			(or 	(and (logical (Smashes SmashesMyPhone))(logical (PonyUp PonyUpYes)))
-        				(and (logical (Smashes SmashesExcuse))(logical (PonyUp PonyUpYes)))
-        				(and (logical (Smashes SmashesFine))(logical (PonyUp PonyUpYes))))
-        			)
-        	)
-        	(logical (AppleCare AppleCareUnbreakable))
-       )
 )
+(defrule q-DontGetPhone
+(or (logical (Whining WhiningNo))
+	(logical (AppleCare AppleCareUnbreakable))
+	(logical (PonyUp PonyUpNo)))
 =>
 (assert (UI-state 	(display DontGetPhone)
 			        (state final)))
 )
-
-
 (defrule q-DontLookBack
-(or
-    (and   (or (and (logical (startowe Bankroll)) (logical (Bankroll Half)))
-     	    (and (logical(startowe Bankroll)) (logical(Bankroll BankrollYes)))
-     	    (and (logical (Whining WhiningStop)) (logical (Bankroll Half)))
-     	    (and (logical(Whining WhiningStop)) (logical(Bankroll BankrollYes)))
-     	)
-     	(logical (HardEarned HumanATM))
-
-    )
-    (and    (or     (and   (logical (startowe Smashes))
-                         (or 	(logical (Smashes SmashesMyPhone))
-              	                (logical (Smashes SmashesExcuse))
-              	                (logical (Smashes SmashesFine))))
-
-              	    (and        (or
-              	                        (and 	(logical (startowe Neverlookup))
-                      			                (logical(Neverlookup NeverlookupNo))
-                      			                (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-                      				                    (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-                      				            )
-                      			        )
-
-                      		            (and        (logical (startowe Neverlookup))
-                         			                (logical (Neverlookup NeverlookupYes))
-                      			                    (logical (HAHA HAHAYEAH))
-                      			                    (logical (UrgentCalls UrgentCallsNo))
-                      			                    (or 	(logical (LITERALLYlosing LITERALLYlosingHangOn))
-                      				                        (logical (LITERALLYlosing LITERALLYlosingSHUTDOWN))
-                      				                )
-                      			        )
-                                 )
-                                 (logical (ShockedLost ShockedLostGuessNot))
-                     )
-
-
-         )
-         (logical (PonyUp HumanATM))
-
-    )
-    (and	(or 	(and
-     			(logical (startowe Onephone))
-       			(logical (Onephone OnephoneDude))
-     			(logical (MmmHmm MmmHmmStory)))
-     		(and	(logical (startowe Smashes))
-       			(or 	(and (logical (Smashes SmashesMyPhone))(logical (PonyUp PonyUpYes)))
-     				(and (logical (Smashes SmashesExcuse))(logical (PonyUp PonyUpYes)))
-     				(and (logical (Smashes SmashesFine))(logical (PonyUp PonyUpYes))))
-     			)
-     	)
-     	(logical (AppleCare HumanATM))
-
-    )
-    (and (or 	(and   	(logical (startowe Whining))
-       			        (logical (Whining WhiningYes))
-       			        (logical (Bullying BullyingYes))
-     			        (logical (Bullied BulliedUsual))
-     		    )
-     		    (and   	(logical (startowe Whining))
-       			        (logical (Whining WhiningYes))
-       			        (logical (Bullying BullyingYes))
-     			        (logical (Bullied BulliedYes))
-     			        (logical (Puppy PuppyIDK))
-     		    )
-         )
-         (logical (GetSomething GetSomethingSweet))
-
-    )
-    (and   (logical (startowe Onephone))
-           (logical (Onephone OnephoneDude))
-           (logical (MmmHmm HumanATM))
-
-    )
-
-)
+(or (logical (GetSomething GetSomethingSweet))
+	(logical (MmmHmm HumanATM))
+	(logical (AppleCare HumanATM))
+	(logical (PonyUp HumanATM))
+	(logical (HardEarned HumanATM)))
 =>
 (assert (UI-state 	(display DontLookBack)
 			        (state final)))
 )
-
-
-
-
 ;;;*************************
 ;;;* GUI INTERACTION RULES *
 ;;;*************************
@@ -674,4 +416,3 @@
    (modify ?f2 (current ?p))
 
    (halt))
-
